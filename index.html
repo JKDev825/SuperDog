@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>SuperDog Events</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+  <!-- Favicons 04-09-21 jdj: custom favicon -->
+  <link href="/img/faviconjd32.png" rel="icon">
+
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- Custom CSS jd: added this from getbootstrap nav, view source, find css reference, open, copy paste all into site.css -->
+  <link rel="stylesheet" href="/CSS/site.css">
+
+
+
+
+</head>
+
+<body id="index">
+
+  <!-- jd: from getbootstrap.com with nav bar, view source html, cut and past from under body the header through footer -->
+
+  <header>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="#">SuperDog Events</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+
+          <li class="nav-item active">
+            <a class="nav-link" href="index.html">Application</a>
+
+          <li class="nav-item">
+            <a class="nav-link" href="CodeView.html">Code Review</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="CodeGet.html">Code Grab</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://jkdev825.netlify.app/" target="_blank">Portfolio</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <div class="jumbotron jumbotron-fluid header">
+    <div class="container hero">
+      <div>
+        <br>
+        <!--         <h1 style="color:white">App Skel2</h1> depending on backgroup text to be black or white -->
+        <h1>Super Dog Events</h1>
+        <!--    <h4 style="color:white">Reverse String Excercise</h4> -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Begin page content -->
+  <main role="main" class="flex-shrink-0">
+
+
+    <div class="container mt-lg-2">
+      <div class="row">
+        <!--        <div class="col mt-1 border border-dark rounded shadow-lg"> -->
+        <div class="col mt-1 rounded shadow-lg">
+          <h2 class="text-center">Super Dog Application</h2>
+          <h6><b>Super Dog Events represents a fictional company managing national events. Their requirements involve
+              displaying attendance statistics. The site presents varied statistics by city. The initial event list
+              represents current events. The site allows for
+              you to add additional events.</b></h6>
+          <h5 class="text-md-center"><b>Please try for yourself</b></h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <hr>
+      <form>
+        <h5>Enter two numbers for the table range</h5>
+
+        <div class="form-row">
+          <div class="col-auto">
+            <label><b>Start number</b> </label>
+            <input type="number" id="numOne" value=1>
+          </div>
+          <div class="col-auto ">
+            <label><b>End number</b> </label>
+            <input type="number" id="numTwo" value=100>
+          </div>
+          <div class="col-auto">
+            <p><b> Notes:</b> <span id="FizzBuzzNotes"></span></p>
+          </div>
+
+        </div>
+        <div class="form-row">
+          <div class="col-auto">
+            <label><b>Alt Modulo 1</b></label>
+            <input type="number" id="modFizz" value=3>
+          </div>
+          <div class="col-auto">
+            <label><b>Alt Modulo 2 </b> </label>
+            <input type="number" id="modBuzz" value=5>
+          </div>
+          <div class="col text-right">
+            <button id="submitBtn" type="button" class="btn btn-danger">Submit</button>
+          </div>
+
+        </div>
+      </form>
+      <table class="table table-striped" id="resultTable">
+        <thead class="thead-dark">
+          <tr>
+            <th colspan="10">Table Results</th> <!-- one column over the width of table -->
+          </tr>
+        </thead>
+        <tbody id="resultsBody">
+          <!-- data will go here -->
+        </tbody>
+      </table>
+    </div>
+
+
+  </main>
+
+  <footer class="footer">
+    <div class="container ml-1">
+      <span class="text-muted">&copy; Copyright jkDev825 2021</span>
+    </div>
+  </footer>
+
+
+  <!-- template logic take from jsloops project   -->
+  <!--  js from site.js connects below at the bottom with script element and document object getelementbyid and function call  -->
+  <!--  after "click"  -->
+  <!--   .must add custom javascript at the bottom of the body and is last following the site.js reference. -->
+  <!--   .the template code below defines what the table data rows will look like and is accessible to the js  -->
+  <!--   .note when creating a new site, to debug, a .vscode folder will be created with a launch.json file  -->
+  <!--   . within the file remove the "file:" line   -->
+  <!--   .add a "url": "http://127.0.0.1:5500/", entry where the ip matches the live server ip in testing -->
+  <!--   .add a "webRoot": "${workspaceFolder}" after without a comman  -->
+  <!--   -->
+  <!--   -->
+  <!--   -->
+
+  <!-- templates are hidden from the browser's view and won't render on the page -->
+  <!-- template below shows 5 columns.  js in site.js will derive the total columns from the template -->
+  <template id="FB-Data-Template">
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </template>
+
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+
+
+  <script src="js/site.js"></script>
+
+
+  <!-- Button hook from html into js -->
+  <!-- for taco cat js
+ <script>
+    document.getElementById("tacoBtn").addEventListener("click", tc_reverseString);
+  </script>
+-->
+
+  <script>
+    document.getElementById("submitBtn").addEventListener("click", fz_FizzBuzzTableArray);
+  </script>
+
+
+</body>
+
+</html>
