@@ -80,12 +80,148 @@ let eventArray = [{
 
 
 
-loadEventData();
+/*
+ ** Function for stats table and data
+ */
+
+//the default display is all events
+let filteredEvents = eventArray;
+
+//build a dropdown of specific cities
+
+/*
+ **
+ ** maps in js:
+ ** distinctEvents[] is a new array.  We just want a unique list of cities from the eventarray[]
+ **
+ ** [...new "new array": read about the 3 dots within js
+ ** [   set "create a subset"]
+ ** [   .map "copy data from the array"
+ ** [    =>  only unique cities.
+ **
+ **
+ **
+ ** the html below builds a list of anchor tags into resultHTML then posts.
+ **
+ **
+ */
+
+function buildDropDown() {
+    let eventDD = document.getElementById("eventDropDown");
+    //discuss this statement
+    let distinctEvents = [...new Set(eventArray.map((eventArray) => eventArray.city))];
+
+    /* builds the html for the drop down list selction  as an <li> and anchor <a>: not recommended method but we're new...for now */
+    let linkHTMLEnd =
+        '<div class="dropdown-divider"></div><a class="dropdown-item" onclick="getEvents(this)" data-string="All" >All</a>';
+
+    let resultHTML = "";
+
+    for (let i = 0; i < distinctEvents.length; i++) {
+        resultHTML += `<a class="dropdown-item" onclick="getEvents(this)" data-string="${distinctEvents[i]}">${distinctEvents[i]}</a>`;
+    }
+    resultHTML += linkHTMLEnd;
+    eventDD.innerHTML = resultHTML;
+
+    /**
+     ** 04-16-21 jdj:.see further 04-16-21 notes below regarding loadEventData() and displayEventData()
+     **              .omit call to displayEventData() here as it requires the full table list which we do not have
+     **               here.
+     **              .replace it with loadEventData() which also calls displayEventData() but loadEventData() will
+     **               use local/session data or the static array if needed AND has the full table list for the display
+     */
+
+    displayStats();
+
+    /* displayEventData(); */
+    loadEventData();
+    return null;
+
+} // end of buildDropDown
+
+//show stats for a specific location
+function getEvents(element) {
+    let city = element.getAttribute("data-string");
+    curEvents = JSON.parse(localStorage.getItem("eventArray")) || eventArray;
+    filteredEvents = curEvents;
+    document.getElementById("statsHeader").innerHTML = `Stats For ${city} Events`;
+    if (city != "All") {
+        //Explain how array filtering works-
+        filteredEvents = curEvents.filter(function (item) {
+            if (item.city == city) {
+                return item;
+            }
+        });
+    }
+    displayStats();
+} // end of getEvents
+
+
+/**
+ **
+ **
+ */
+function displayStats() {
+    let total = 0;
+    let average = 0;
+    let most = 0;
+    let least = -1;
+    let currentAttendance = 0;
+
+    //display total attendance
+    for (let i = 0; i < filteredEvents.length; i++) {
+        currentAttendance = filteredEvents[i].attendance;
+        total += currentAttendance;
+
+        if (most < currentAttendance) {
+            most = currentAttendance;
+        }
+
+        if (least > currentAttendance || least < 0) {
+            least = currentAttendance;
+        }
+    }
+    average = total / filteredEvents.length;
+
+    document.getElementById("total").innerHTML = total.toLocaleString();
+    document.getElementById("most").innerHTML = most.toLocaleString();
+    document.getElementById("least").innerHTML = least.toLocaleString();
+    document.getElementById("average").innerHTML = average.toLocaleString(
+        undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }
+    );
+} // end of displayStats
+
+
+
+
+/*
+ **
+ **  04-15-21 .Main Table Functions to load, add new and display
+ **  04-16-21 .now created buildDropDown() and hooked into html <body onload = "buildDropDown()">
+ **            so it also gets called when the page is loaded and the body tag is read.
+ **           .loadEventData() does get called first in the beginning of the page and creates the data table.
+ **           .it then calls DisplayEventData(newobjtablelist) which wipes out the original display.
+ **
+ **           .now buildDropDown() gets called with also displayEventData() but without a passed list.  For the
+ **            beginning of the excercise then wipes out the table again.
+ **           .So, we want to omit the initialization call to loadEventData(); as buildDropDown() is now being
+ **            called in the beginning.
+ **           .Replace the displayEventData() call from within buildDropDown() with a loadEventdata() call.
+ **
+ **   note:   .loadEventData() moved to inside of buildDropDown()
+ **
+ */
+
+
 
 function loadEventData() {
     let eventData = [];
     eventData = getEventData();
     displayEventData(eventData);
+
     return null;
 } // end of loadEventData()
 
