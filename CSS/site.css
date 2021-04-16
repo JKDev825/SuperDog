@@ -230,3 +230,17 @@ hr {
   border: 1px solid #014474;
   border-radius: 2px;
 }
+
+/*
+**
+** 04-09-21 jdj: .create a class to round all images.
+**               "img.rounded-corners" here using border-radius.
+**               html will be "<img src="xx.jpg" class="rounded-corners"/>
+**
+*/
+img.rounded-corners {
+  /* border: 2px solid red; */
+  border-radius: 30px;
+  /* box-shadow: 10px 10px 5px grey; it shows the card sqare corners */
+  object-fit: cover;
+}
