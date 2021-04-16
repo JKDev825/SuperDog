@@ -6,8 +6,8 @@
  **              .Add simple validation to the form data.
  **
  **      Logic:  .Grab the input range numbers to build the integer array.
- **
- **
+ **              .sessionStorage will be used instead of localStorage.  Session will clear on browser exit where local will
+ **               remain until you manually clear via the browser.
  **
  **
  **
@@ -98,11 +98,11 @@ function loadEventData() {
  **
  */
 function getEventData() {
-    let eventData = JSON.parse(localStorage.getItem("eventArray")) || [];
+    let eventData = JSON.parse(sessionStorage.getItem("eventArray")) || [];
 
     if (eventData.length == 0) {
         eventData = eventArray;
-        localStorage.setItem("eventArray", JSON.stringify(eventData));
+        sessionStorage.setItem("eventArray", JSON.stringify(eventData));
     }
 
     return eventData;
@@ -111,7 +111,7 @@ function getEventData() {
 function saveEventFormData() {
 
     // grab the events out of local storage
-    let eventData = JSON.parse(localStorage.getItem("eventArray")) || eventArray;
+    let eventData = JSON.parse(sessionStorage.getItem("eventArray")) || eventArray;
 
     let obj = {};
 
@@ -123,7 +123,7 @@ function saveEventFormData() {
 
     eventData.push(obj);
 
-    localStorage.setItem("eventArray", JSON.stringify(eventData));
+    sessionStorage.setItem("eventArray", JSON.stringify(eventData));
 
     displayEventData(eventData);
     return null;
@@ -157,21 +157,36 @@ function displayEventData(eventData) {
  ** .Strings grabbed from the form input date type show "yyyy/mm/dd"
  ** .Turn the string into a date object and use the js methods to individually acess the date 
  **  components to build the current string in a consistent format.
- **
+ ** .use individual date component variables to test individuall for NaN.
+ ** 
+ ** 
  */
 function formatDateMMDDYYYY(dateString) {
 
 
-    let d = new Date(dateString);
+    let dateObj = new Date(dateString);
 
-    let mm = d.getMonth(d);
-    let dd = d.getDay(d);
-    let yy = d.getFullYear(d);
+    let mm = dateObj.getMonth(dateObj);
+    let dd = dateObj.getDay(dateObj);
+    let ccyy = dateObj.getFullYear(dateObj);
 
 
-    let dateStrmmddyy = `${d.getMonth()}/${d.getDay()}/${d.getFullYear()}`;
+    if (isNaN(mm) == true) {
+        mm = "";
+    }
+    if (isNaN(dd) == true) {
+        dd = "";
+    }
+    if (isNaN(ccyy) == true) {
+        ccyy = "";
+    }
+
+
+
+    let dateStrmmddyy = `${mm}/${dd}/${ccyy}`;
 
     return dateStrmmddyy;
+
 } // end of formatDateMMDDYYYY()
 
 /**
