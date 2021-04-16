@@ -20,8 +20,6 @@
   <link rel="stylesheet" href="/CSS/site.css">
 
 
-
-
 </head>
 
 <body id="index">
@@ -71,7 +69,6 @@
   <!-- Begin page content -->
   <main role="main" class="flex-shrink-0">
 
-
     <div class="container mt-lg-2">
       <div class="row">
         <!--        <div class="col mt-1 border border-dark rounded shadow-lg"> -->
@@ -87,49 +84,78 @@
     </div>
 
     <div class="container">
+      <div class="row">
+        <div class="col">
+          <hr>
+          <p> placeholder section for display stats</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="container">
       <hr>
-      <form>
-        <h5>Enter two numbers for the table range</h5>
 
-        <div class="form-row">
-          <div class="col-auto">
-            <label><b>Start number</b> </label>
-            <input type="number" id="numOne" value=1>
-          </div>
-          <div class="col-auto ">
-            <label><b>End number</b> </label>
-            <input type="number" id="numTwo" value=100>
-          </div>
-          <div class="col-auto">
-            <p><b> Notes:</b> <span id="FizzBuzzNotes"></span></p>
-          </div>
-
-        </div>
-        <div class="form-row">
-          <div class="col-auto">
-            <label><b>Alt Modulo 1</b></label>
-            <input type="number" id="modFizz" value=3>
-          </div>
-          <div class="col-auto">
-            <label><b>Alt Modulo 2 </b> </label>
-            <input type="number" id="modBuzz" value=5>
-          </div>
-          <div class="col text-right">
-            <button id="submitBtn" type="button" class="btn btn-danger">Submit</button>
-          </div>
-
-        </div>
-      </form>
-      <table class="table table-striped" id="resultTable">
+      <button type="button" class="btn-secondary" data-toggle="modal" data-target="#addEvent">Add Event</button>
+      <hr>
+      <table class="table table-striped" id="EventTable">
         <thead class="thead-dark">
           <tr>
-            <th colspan="10">Table Results</th> <!-- one column over the width of table -->
+            <th>Event</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Attendence</th>
+            <th>Date</th>
           </tr>
         </thead>
         <tbody id="resultsBody">
-          <!-- data will go here -->
+          <!-- data for the event table book will go here -->
         </tbody>
       </table>
+
+      <div class="modal" id="addEvent">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- makes content all white for all in between -->
+            <div class="modal-header">
+              <h4 class="modal-title">Add a new event</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <form id="newAEventForm">
+                <div class="form-group">
+                  <label for="newEvent">Full Name</label>
+                  <input type="text" class="form-control" id="newEvent" placeholder="Event Name" required>
+                </div>
+                <div class="form-group">
+                  <label for="newCity">City</label>
+                  <input type="text" class="form-control" id="newCity" placeholder="City" required>
+                </div>
+                <div class="form-group">
+                  <label for="newState">State</label>
+                  <input type="text" class="form-control" id="newState" placeholder="State" pattern="[A-Z]{2}" required>
+                </div>
+                <div class="form-group">
+                  <label for="newAttendance">Attendance</label>
+                  <input type="number" class="form-control" id="newAttendance" placeholder="Total Attendees">
+                </div>
+                <div class="form-group">
+                  <label for="newDate">Date</label>
+                  <input type="date" class="form-control" id="newDate" pattern="[0-9]{1,2}/[0-9]{1,2}-[0-9]{4}"
+                    placeholder="mm/dd/ccyy">
+
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-success" onclick="saveEventFormData()"
+                data-dismiss="modal">Save</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
 
@@ -157,13 +183,13 @@
 
   <!-- templates are hidden from the browser's view and won't render on the page -->
   <!-- template below shows 5 columns.  js in site.js will derive the total columns from the template -->
-  <template id="FB-Data-Template">
+  <template id="Event-Data-Template">
     <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td id="eventname"></td>
+      <td id="city"></td>
+      <td id="state"></td>
+      <td id="attendance"></td>
+      <td id="date"></td>
     </tr>
   </template>
 
@@ -192,10 +218,11 @@
   </script>
 -->
 
+  <!-- 04-15-21 jdj:  Comment out but keep for reference  Direct calls to JS above from buttons onclick
   <script>
     document.getElementById("submitBtn").addEventListener("click", fz_FizzBuzzTableArray);
   </script>
-
+-->
 
 </body>
 
