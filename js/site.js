@@ -84,7 +84,7 @@ loadEventData();
 
 function loadEventData() {
     let eventData = [];
-    eventData = getData();
+    eventData = getEventData();
     displayEventData(eventData);
     //  return;
 }
@@ -92,57 +92,57 @@ function loadEventData() {
 
 /**
  **
- ** The "||or" and "[]array" following the JSON call simply means give me the addressArray OR if not found return an empty array.
+ ** The "||or" and "[]array" following the JSON call simply means give me the eventArray OR if not found return an empty array.
  ** Check if it was found.  If not then create it from the static data at the top and allocate a local store for it.
  ** Everything pushed through JSON has to be stringify"ed"...turns it into JSON.
  **
  */
-function getData() {
-    let addressBook = JSON.parse(localStorage.getItem("eventArray")) || [];
+function getEventData() {
+    let eventData = JSON.parse(localStorage.getItem("eventArray")) || [];
 
-    if (addressBook.length == 0) {
-        addressBook = addressArray;
-        localStorage.setItem("eventArray", JSON.stringify(addressBook));
+    if (eventData.length == 0) {
+        eventData = eventArray;
+        localStorage.setItem("eventArray", JSON.stringify(eventData));
     }
 
-    return addressBook;
+    return eventData;
 }
 
 function saveEventFormData() {
 
     // grab the events out of local storage
-    let addressBook = JSON.parse(localStorage.getItem("eventArray")) || addressArray;
+    let eventData = JSON.parse(localStorage.getItem("eventArray")) || eventArray;
 
     let obj = {};
 
-    obj["event"] = document.getElementById("newName").value;
+    obj["event"] = document.getElementById("newEvent").value;
     obj["city"] = document.getElementById("newCity").value;
     obj["state"] = document.getElementById("newState").value;
     obj["attendance"] = document.getElementById("newAttendance").value;
     obj["date"] = document.getElementById("newDate").value;
 
-    addressBook.push(obj);
+    eventData.push(obj);
 
-    localStorage.setItem("eventArray", JSON.stringify(addressBook));
+    localStorage.setItem("eventArray", JSON.stringify(eventData));
 
-    displayData(addressBook);
+    displayEventData(eventData);
     //   return;
 }
 
-function displayEventData(addressBook) {
+function displayEventData(eventData) {
     const template = document.getElementById("Event-Data-Template");
     const resultsBody = document.getElementById("resultsBody");
 
     resultsBody.innerHTML = "";
 
-    for (let i = 0; i < addressBook.length; i++) {
+    for (let i = 0; i < eventData.length; i++) {
         const dataRow = document.importNode(template.content, true);
 
-        dataRow.getElementById("eventname").textContent = addressBook[i].name;
-        dataRow.getElementById("city").textContent = addressBook[i].city;
-        dataRow.getElementById("state").textContent = addressBook[i].state;
-        dataRow.getElementById("attendance").textContent = addressBook[i].email;
-        dataRow.getElementById("date").textContent = formatDateMMDDYYY(addressBook[i].phone);
+        dataRow.getElementById("eventname").textContent = eventData[i].event;
+        dataRow.getElementById("city").textContent = eventData[i].city;
+        dataRow.getElementById("state").textContent = eventData[i].state;
+        dataRow.getElementById("attendance").textContent = eventData[i].attendance;
+        dataRow.getElementById("date").textContent = formatDateMMDDYYYY(eventData[i].date);
 
         resultsBody.appendChild(dataRow);
     }
@@ -150,7 +150,7 @@ function displayEventData(addressBook) {
 }
 
 
-function formatDateMMDDYY(dateString) {
+function formatDateMMDDYYYY(dateString) {
     /*
     var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
     var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
@@ -158,5 +158,9 @@ function formatDateMMDDYY(dateString) {
         return '(' + match[1] + ') ' + match[2] + '-' + match[3];
     }
     */
-    return null;
+
+    let d = new Date(dateString);
+    let dateStrmmddyy = `${d.getMonth}/${d.getDay}/${d.getFullYear}`;
+
+    return dateStrmmddyy;
 }
