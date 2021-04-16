@@ -96,7 +96,8 @@
       <hr>
 
       <button type="button" class="btn-secondary" data-toggle="modal" data-target="#addEvent">Add Event</button>
-      <hr>
+      <br>
+      <br>
       <table class="table table-striped" id="EventTable">
         <thead class="thead-dark">
           <tr>
@@ -123,16 +124,17 @@
             <div class="modal-body">
               <form id="newAEventForm">
                 <div class="form-group">
-                  <label for="newEvent">Full Name</label>
-                  <input type="text" class="form-control" id="newEvent" placeholder="Event Name" required>
+                  <label for="newEvent">Event Name</label>
+                  <input type="text" class="form-control" id="newEvent" placeholder="Event Name">
                 </div>
                 <div class="form-group">
                   <label for="newCity">City</label>
-                  <input type="text" class="form-control" id="newCity" placeholder="City" required>
+                  <input type="text" class="form-control" id="newCity" placeholder="City">
                 </div>
                 <div class="form-group">
                   <label for="newState">State</label>
-                  <input type="text" class="form-control" id="newState" placeholder="State" pattern="[A-Z]{2}" required>
+                  <input type="text" class="form-control" id="newState" placeholder="Two letter state"
+                    pattern="[A-Z]{2}">
                 </div>
                 <div class="form-group">
                   <label for="newAttendance">Attendance</label>
@@ -142,7 +144,6 @@
                   <label for="newDate">Date</label>
                   <input type="date" class="form-control" id="newDate" pattern="[0-9]{1,2}/[0-9]{1,2}-[0-9]{4}"
                     placeholder="mm/dd/ccyy">
-
                 </div>
               </form>
             </div>

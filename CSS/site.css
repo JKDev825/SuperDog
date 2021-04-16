@@ -214,18 +214,19 @@ code {
 
 /* 04-14-21 jdj: added this for screen error notes section. */
 .noteBuzzErr {
-  font-weight:bold;
+  font-weight: bold;
   color: rgb(99, 9, 9);
   font-size: medium;
 }
+
 .noteBuzzOk {
   font-weight: bold;
   color: rgb(35, 110, 51);
   font-size: medium;
 }
-/* 04-15-21 jdj: creates a bolder and larger <hr> header line */  
-  hr {
-    border: 3px solid #014474;
-    border-radius: 2px;
-  }
 
+/* 04-15-21 jdj: creates a bolder and larger <hr> header line */
+hr {
+  border: 1px solid #014474;
+  border-radius: 2px;
+}
