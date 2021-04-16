@@ -86,8 +86,8 @@ function loadEventData() {
     let eventData = [];
     eventData = getEventData();
     displayEventData(eventData);
-    //  return;
-}
+    return null;
+} // end of loadEventData()
 
 
 /**
@@ -106,7 +106,7 @@ function getEventData() {
     }
 
     return eventData;
-}
+} // end of getEventData()
 
 function saveEventFormData() {
 
@@ -126,8 +126,8 @@ function saveEventFormData() {
     localStorage.setItem("eventArray", JSON.stringify(eventData));
 
     displayEventData(eventData);
-    //   return;
-}
+    return null;
+} // end of saveEventData()
 
 function displayEventData(eventData) {
     const template = document.getElementById("Event-Data-Template");
@@ -146,21 +146,34 @@ function displayEventData(eventData) {
 
         resultsBody.appendChild(dataRow);
     }
-    // return;
-}
+    return null;
+} // end of displayEvenData()
 
 
+
+/*
+ ** .Formats the passed date string into a date object to return a string showwing mm/dd/yyyy
+ ** .The passed string from the initial array or internal storage load shows "mm/dd/yyyy"
+ ** .Strings grabbed from the form input date type show "yyyy/mm/dd"
+ ** .Turn the string into a date object and use the js methods to individually acess the date 
+ **  components to build the current string in a consistent format.
+ **
+ */
 function formatDateMMDDYYYY(dateString) {
-    /*
-    var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
-    var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-    if (match) {
-        return '(' + match[1] + ') ' + match[2] + '-' + match[3];
-    }
-    */
+
 
     let d = new Date(dateString);
-    let dateStrmmddyy = `${d.getMonth}/${d.getDay}/${d.getFullYear}`;
+
+    let mm = d.getMonth(d);
+    let dd = d.getDay(d);
+    let yy = d.getFullYear(d);
+
+
+    let dateStrmmddyy = `${d.getMonth()}/${d.getDay()}/${d.getFullYear()}`;
 
     return dateStrmmddyy;
-}
+} // end of formatDateMMDDYYYY()
+
+/**
+ ** end of site.js
+ */
