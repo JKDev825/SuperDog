@@ -107,9 +107,20 @@ let filteredEvents = eventArray;
  */
 
 function buildDropDown() {
+
+
     let eventDD = document.getElementById("eventDropDown");
+    let eventDataList = getEventData(); /* get the list from disk or the static array at the top */
+
+
+
     //discuss this statement
-    let distinctEvents = [...new Set(eventArray.map((eventArray) => eventArray.city))];
+
+    /*   let distinctEvents = [...new Set(eventArray.map((eventArray) => eventArray.city))]; */
+    let distinctEvents = [...new Set(eventDataList.map((eventDataList) => eventDataList.city))];
+
+
+
 
     /* builds the html for the drop down list selction  as an <li> and anchor <a>: not recommended method but we're new...for now */
     let linkHTMLEnd =
@@ -139,10 +150,26 @@ function buildDropDown() {
 
 } // end of buildDropDown
 
+
+
+/*
+ **
+ **
+ **
+ ** Anonomous function after .filter where the code follows to check.filter(function (item) )
+ ** item because a passed parm-local variable (name doesn't matter). it knows the array object has the .city propriety so we're checking
+ ** the location city variable we got from the drop down list the use selected to match.  If true it creates the new filterEvents array with just the
+ ** matching city value.  filteredevents[] is declared globally.
+ **
+ **
+ **
+ */
+
+
 //show stats for a specific location
 function getEvents(element) {
     let city = element.getAttribute("data-string");
-    curEvents = JSON.parse(localStorage.getItem("eventArray")) || eventArray;
+    let curEvents = JSON.parse(localStorage.getItem("eventArray")) || eventArray;
     filteredEvents = curEvents;
     document.getElementById("statsHeader").innerHTML = `Stats For ${city} Events`;
     if (city != "All") {
@@ -214,7 +241,7 @@ function displayStats() {
  **   note:   .loadEventData() moved to inside of buildDropDown()
  **
  */
-
+loadEventData();
 
 
 function loadEventData() {
@@ -234,11 +261,11 @@ function loadEventData() {
  **
  */
 function getEventData() {
-    let eventData = JSON.parse(sessionStorage.getItem("eventArray")) || [];
+    let eventData = JSON.parse(localStorage.getItem("eventArray")) || [];
 
     if (eventData.length == 0) {
         eventData = eventArray;
-        sessionStorage.setItem("eventArray", JSON.stringify(eventData));
+        localStorage.setItem("eventArray", JSON.stringify(eventData));
     }
 
     return eventData;
@@ -247,7 +274,7 @@ function getEventData() {
 function saveEventFormData() {
 
     // grab the events out of local storage
-    let eventData = JSON.parse(sessionStorage.getItem("eventArray")) || eventArray;
+    let eventData = JSON.parse(localStorage.getItem("eventArray")) || eventArray;
 
     let obj = {};
 
@@ -259,7 +286,7 @@ function saveEventFormData() {
 
     eventData.push(obj);
 
-    sessionStorage.setItem("eventArray", JSON.stringify(eventData));
+    localStorage.setItem("eventArray", JSON.stringify(eventData));
 
     displayEventData(eventData);
     return null;
