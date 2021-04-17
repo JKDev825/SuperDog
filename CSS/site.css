@@ -68,6 +68,13 @@ body {
   margin-bottom: 60px;
 }
 
+
+.my-bg-color {
+  background: #F0F2F0;
+  background: -webkit-linear-gradient(to right, #000C40, #F0F2F0);
+  background: linear-gradient(to right, #757a92, #F0F2F0);
+}
+
 #index {
   background: #6D6027;
   /* fallback for old browsers */
@@ -243,4 +250,12 @@ img.rounded-corners {
   border-radius: 30px;
   /* box-shadow: 10px 10px 5px grey; it shows the card sqare corners */
   object-fit: cover;
+}
+
+img.img-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

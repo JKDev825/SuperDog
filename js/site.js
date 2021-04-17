@@ -288,6 +288,7 @@ function saveEventFormData() {
 
     localStorage.setItem("eventArray", JSON.stringify(eventData));
 
+    displayStats();
     displayEventData(eventData);
     return null;
 } // end of saveEventData()
@@ -304,7 +305,7 @@ function displayEventData(eventData) {
         dataRow.getElementById("eventname").textContent = eventData[i].event;
         dataRow.getElementById("city").textContent = eventData[i].city;
         dataRow.getElementById("state").textContent = eventData[i].state;
-        dataRow.getElementById("attendance").textContent = eventData[i].attendance;
+        dataRow.getElementById("attendance").textContent = eventData[i].attendance.toLocaleString();
         dataRow.getElementById("date").textContent = formatDateMMDDYYYY(eventData[i].date);
 
         resultsBody.appendChild(dataRow);

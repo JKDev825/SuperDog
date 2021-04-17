@@ -24,6 +24,7 @@
 
 
 <!-- <body id="index"> -->
+
 <body id="index" onload="buildDropDown()">
 
   <!-- jd: from getbootstrap.com with nav bar, view source html, cut and past from under body the header through footer -->
@@ -69,7 +70,7 @@
 
 
   <!-- Begin page content -->
-<!--  <main role="main" class="flex-shrink-0"> -->
+  <!--  <main role="main" class="flex-shrink-0"> -->
   <main role="main" class="container-fluid">
 
     <div class="container mt-lg-2">
@@ -84,12 +85,12 @@
           <h5 class="text-md-center"><b>Please try for yourself</b></h5>
         </div>
       </div>
+      <hr>
     </div>
 
-    <div class="container-fluid">
+    <div class="container">
       <div class="row">
-        <div class="col-sm-6">
-          <hr>
+        <div class="col-sm-6 my-bg-color rounded shadow-lg">
           <div class="btn-group">
             <button type="button" class="btn btn-secondary">Pick a location</button>
             <button type="button" class="btn btn-secondary dropdown-toggle dropdown-togle dropdown-toggle-split"
@@ -106,24 +107,24 @@
             </tr>
             <tr>
               <td>Total Attendance</td>
-              <td id="total">100</td>
+              <td id="total" style="text-align:right">100</td>
             </tr>
             <tr>
               <td>Average Attendance</td>
-              <td id="average">100</td>
+              <td id="average" style="text-align:right">100</td>
             </tr>
             <tr>
               <td>Most Attended</td>
-              <td id="most">100</td>
+              <td id="most" style="text-align:right">100</td>
             </tr>
             <tr>
               <td>Least Attended</td>
-              <td id="least">100</td>
+              <td id="least" style="text-align:right">100</td>
             </tr>
           </table>
         </div> <!-- end of col1 -->
         <div class="col-sm-6 order-first order-md-2">
-          <img src="/img/SuperDog.jpg" class="img-fluid p-2 mt-3 rounded-corners" width="400" height="500">
+          <img src="/img/SuperDog.jpg" class="img-fluid img-center shadow-lg rounded-corners" width="400" height="500">
         </div> <!-- end of col2 -->
       </div> <!-- end of row -->
     </div> <!-- end of container-->
