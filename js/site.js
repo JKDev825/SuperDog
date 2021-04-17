@@ -81,11 +81,37 @@ let eventArray = [{
 
 
 /*
- ** Function for stats table and data
+ ** .Default display is all events.
+ ** .filteredEvents will be udpated by matching city
+ */
+let filteredEvents = eventArray;
+
+
+
+/**
+ ** 
+ ** loadEvenData()              .called firt on page load.
+ **                             .calls getEvents() then displayEventData() to load the main table.
+ **
+ ** getEventData()               .reads localstorage named "eventArray" or initializes a new array from eventArray[]
+ ** displayEventData(eventData)  creates main data table display.  Requires the array to be passed
+ **
+ ** buildDropDown()             .called from html body tag onload=
+ **                             .builds the location stats drop down menu by location. buildDropDownMenu()
+ **                             .updates the statistics table.
+ **                             .updates the main data table.
+ **
+ **
+ **
+ **
+ **
+ **
  */
 
-//the default display is all events
-let filteredEvents = eventArray;
+
+
+
+
 
 //build a dropdown of specific cities
 
@@ -100,21 +126,74 @@ let filteredEvents = eventArray;
  ** [    =>  only unique cities.
  **
  **
- **
  ** the html below builds a list of anchor tags into resultHTML then posts.
- **
  **
  */
 
 function buildDropDown() {
+    buildDropDownMenu(); // build city drop down list
+    displayStats(); // display event stats by location
+    loadEventData(); // loads main data table.
+    return null;
+}
+
+/*
+ ** .create location drop down menu for statistics
+ ** .takes a copy of the current data table
+ ** .creates a new array with just a list of distinct city names.
+ ** .builds the line level html with onclick=getEvent to allow a location specific selection and refresh
+ ** .ending html that includes all locations.
+ */
+function buildDropDownMenu() {
 
 
     let eventDD = document.getElementById("eventDropDown");
     let eventDataList = getEventData(); /* get the list from disk or the static array at the top */
 
+    /*
+     ** .take into account city mixed and punctuation.  Slight differences create multiple list entries
+     ** .run through through the data array and normalize each city field.
+     ** .build a normalized city string array for the distinct call
+     ** .also keep the original display version.  Don't care wich one distinct includes.
+     */
+    /*
+    let cityObjArr = [{
+        displayCity: "",
+        normalizedCity: ""
+    }];
+    */
 
+    let cityObjArr = [{
+        displayCity: "",
+        normalizedCity: ""
+    }];
+    let obj = {};
 
-    //discuss this statement
+    for (let x = 0; x < eventDataList.length; x++) {
+        //    cityObjArr[x].displayCity = eventDataList[x].city;
+        //   cityObjArr[x].normalizedCity = normalizeString(cityObjArr[x].displayCity);
+
+        obj["displayCity"] = eventDataList[x].city;
+        obj["normalizedCity"] = normalizeString(eventDataList[x].city);
+        cityObjArr.push(obj);
+
+        /*
+        if (x == 0) {
+            //            cityObjArr[x] = obj;
+            cityObjArr[y].displayCity = eventDataList[x].city;
+            cityObjArr[y].normalizedCity = normalizeString(eventDataList[x].city);
+        } else {
+            // cityObjArr.push(obj);
+            //            cityObjArr[y] = obj;
+            cityObjArr[y].displayCity = eventDataList[x].city;
+            cityObjArr[y].normalizedCity = normalizeString(eventDataList[x].city);
+
+        }
+        */
+    }
+
+    // testing   let distinctCityArr = [...new Set(cityObjArr.map((cityObjArr) => cityObjArr.normalizedcity))];
+
 
     /*   let distinctEvents = [...new Set(eventArray.map((eventArray) => eventArray.city))]; */
     let distinctEvents = [...new Set(eventDataList.map((eventDataList) => eventDataList.city))];
@@ -134,18 +213,6 @@ function buildDropDown() {
     resultHTML += linkHTMLEnd;
     eventDD.innerHTML = resultHTML;
 
-    /**
-     ** 04-16-21 jdj:.see further 04-16-21 notes below regarding loadEventData() and displayEventData()
-     **              .omit call to displayEventData() here as it requires the full table list which we do not have
-     **               here.
-     **              .replace it with loadEventData() which also calls displayEventData() but loadEventData() will
-     **               use local/session data or the static array if needed AND has the full table list for the display
-     */
-
-    displayStats();
-
-    /* displayEventData(); */
-    loadEventData();
     return null;
 
 } // end of buildDropDown
@@ -156,7 +223,7 @@ function buildDropDown() {
  **
  **
  **
- ** Anonomous function after .filter where the code follows to check.filter(function (item) )
+ ** function after .filter where the code follows to check.filter(function (item) )
  ** item because a passed parm-local variable (name doesn't matter). it knows the array object has the .city propriety so we're checking
  ** the location city variable we got from the drop down list the use selected to match.  If true it creates the new filterEvents array with just the
  ** matching city value.  filteredevents[] is declared globally.
@@ -170,6 +237,7 @@ function buildDropDown() {
 function getEvents(element) {
     let city = element.getAttribute("data-string");
     let curEvents = JSON.parse(localStorage.getItem("eventArray")) || eventArray;
+
     filteredEvents = curEvents;
     document.getElementById("statsHeader").innerHTML = `Stats For ${city} Events`;
     if (city != "All") {
@@ -185,8 +253,7 @@ function getEvents(element) {
 
 
 /**
- **
- **
+ ** .build stats display totals
  */
 function displayStats() {
     let total = 0;
@@ -253,6 +320,15 @@ function loadEventData() {
 } // end of loadEventData()
 
 
+function updateEvenDataDisplays() {
+
+    loadEventData();
+    displayStats();
+
+    return null;
+}
+
+
 /**
  **
  ** The "||or" and "[]array" following the JSON call simply means give me the eventArray OR if not found return an empty array.
@@ -281,15 +357,16 @@ function saveEventFormData() {
     obj["event"] = document.getElementById("newEvent").value;
     obj["city"] = document.getElementById("newCity").value;
     obj["state"] = document.getElementById("newState").value;
-    obj["attendance"] = document.getElementById("newAttendance").value;
+    obj["attendance"] = parseInt(document.getElementById("newAttendance").value, 10);
     obj["date"] = document.getElementById("newDate").value;
 
     eventData.push(obj);
 
     localStorage.setItem("eventArray", JSON.stringify(eventData));
 
-    displayStats();
-    displayEventData(eventData);
+    buildDropDown(); // update dropdown menu to included the new dataset entry if unuique.
+    updateEvenDataDisplays(); // update the stats and main table data displays
+
     return null;
 } // end of saveEventData()
 
@@ -336,16 +413,14 @@ function formatDateMMDDYYYY(dateString) {
 
 
     if (isNaN(mm) == true) {
-        mm = "";
+        mm = "00";
     }
     if (isNaN(dd) == true) {
-        dd = "";
+        dd = "00";
     }
     if (isNaN(ccyy) == true) {
-        ccyy = "";
+        ccyy = "00";
     }
-
-
 
     let dateStrmmddyy = `${mm}/${dd}/${ccyy}`;
 
@@ -353,6 +428,47 @@ function formatDateMMDDYYYY(dateString) {
 
 } // end of formatDateMMDDYYYY()
 
+
+function compareStringsTheSame(str1, str2) {
+
+    str1 = normalizeString(str1);
+    str2 = normalizeString(str2);
+
+    if (str1 == str2) {
+        return true;
+    }
+
+    return false;
+}
+
+
+/*
+ ** .remove all non alpha characters from the string and only leave 'A-Z' and '0-9'.  return string will be all CAPS !!!
+ ** .white space and punctuation will be removed.
+ */
+function normalizeString(passedString) {
+    let tmpWorkString = "";
+    let returnString = "";
+    let lenStr = 0;
+
+    tmpWorkString = passedString;
+    tmpWorkString = tmpWorkString.toUpperCase();
+    lenStr = tmpWorkString.length;
+
+    for (let x = 0; x < lenStr; x++) {
+        if (tmpWorkString[x] >= 'A' && tmpWorkString[x] <= 'Z') {
+            returnString = returnString + tmpWorkString[x];
+            continue;
+        }
+        if (tmpWorkString[x] >= '0' && tmpWorkString[x] <= '9') {
+            returnString = returnString + tmpWorkString[x];
+            continue;
+        }
+        continue; // here for clarity; skip the character
+    }
+
+    return returnString;
+}
 /**
  ** end of site.js
  */
