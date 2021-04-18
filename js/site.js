@@ -126,6 +126,11 @@ let filteredEvents = eventArray;
  **
  */
 
+/*
+ ** .HTML entry point from body tage onload=buildDropDown()
+ ** .controls build of the drop down menu for location selections.
+ ** .Update the statistics and full datset displays.
+ */
 function buildDropDown() {
     buildDropDownMenu(); // build city drop down list
     updateEventDataDisplays();
@@ -210,7 +215,7 @@ function buildDropDownMenu() {
 
     return null;
 
-} /* end of buildDropDown */
+} /* end of buildDropDownMenu */
 
 
 
@@ -224,7 +229,11 @@ function buildDropDownMenu() {
  */
 
 
-//show stats for a specific location
+/*
+ ** .Grabs the location selected from the menu and the menu stats header which includes the location name.
+ ** .resets the filteredEvents[] array with location specic entries or for All.
+ ** .update the display totals and return control.
+ */
 function getEvents(element) {
 
     let cityName = element.getAttribute("data-string"); /* get the use picked location name */
@@ -236,12 +245,13 @@ function getEvents(element) {
     return null;
 }
 
+/*
+ ** .update the global filteredEvents[] array with the location string passed.
+ */
 function setFilteredEvents(matchCityName) {
-    //  let city = element.getAttribute("data-string");
     let curEvents = getEventData(); /* get the current data set */
 
     filteredEvents = curEvents;
-    //    document.getElementById("statsHeader").innerHTML = `Stats For ${cityName} Events`;
     if (matchCityName != "All") {
         //Explain how array filtering works-
         filteredEvents = curEvents.filter(function (item) {
@@ -250,12 +260,18 @@ function setFilteredEvents(matchCityName) {
             }
         });
     }
-    //  displayStats();
-} /* end of getEvents */
+    return null;
+} /* end of setFilteredEvents() */
 
 
 /**
- ** .build stats display totals
+ ** .Build stats display totals
+ ** .This is dependent on the global filteredEvents[] array.
+ ** .filteredEvents will show All or select locations from buildDropDownMenu()
+ **  and selections made by the user from getEvents()
+ **
+ **
+ **
  */
 function displayStats() {
     let total = 0;
@@ -312,7 +328,12 @@ function displayStats() {
  */
 loadEventData();
 
-
+/*
+ ** .js entry point.
+ ** .get initial dataset.
+ ** .set the filteredEvents[] array for stats display.
+ ** .display the full dataset.
+ */
 function loadEventData() {
 
     eventData = initGetEventData();
@@ -353,7 +374,7 @@ function initGetEventData() {
 
     if (eventData.length == 0) {
         eventData = eventArray;
-        putEvenData(eventData);
+        putEventData(eventData);
     }
 
     return eventData;
@@ -391,7 +412,7 @@ function getEvenDataFromStorage(createNewFromArray) {
 
 } /* end of getEventDataFromStorage */
 
-function putEvenData(dataSet) {
+function putEventData(dataSet) {
 
     /**
      ** .future lessons yet to be had regarding error i/o handling best practices
@@ -405,14 +426,15 @@ function putEvenData(dataSet) {
 
 
 /*
-** .user save new event form.
-** .grab the current dataset
-** .build a new object with the form contents and push onto the dataset and save.
-** .check if the current display stats header location matches the new form data.
-** .if it does update the stats window with the new data totals
-** .Also update the totals display if current on "All"
-** .rebuild the dropdown and update all displays.
-*/
+ ** .user save new event form.
+ ** .form validation is NOT being applied for this exercise.
+ ** .grab the current dataset
+ ** .build a new object with the form contents and push onto the dataset and save.
+ ** .check if the current display stats header location matches the new form data.
+ ** .if it does update the stats window with the new data totals
+ ** .Also update the totals display if current on "All"
+ ** .rebuild the dropdown and update all displays.
+ */
 function saveEventFormData() {
 
     /* let eventData = JSON.parse(localStorage.getItem("eventArray")) || eventArray; */
@@ -429,7 +451,7 @@ function saveEventFormData() {
     eventData.push(obj);
 
     /* localStorage.setItem("eventArray", JSON.stringify(eventData)); replaced with putEventData() */
-    putEvenData(eventData);
+    putEventData(eventData);
 
     let hdrCityStr = document.getElementById("statsHeader").innerHTML;
     hdrCityStr = normalizeString(hdrCityStr);
@@ -451,7 +473,7 @@ function saveEventFormData() {
     updateEventDataDisplays(); /* update the stats and main table data displays */
     document.getElementById("newAEventForm").reset(); /* reset the contents of the form */
     return null;
-} // end of saveEventData()
+} /* end of saveEventData() */
 
 function displayEventData(eventData) {
     const template = document.getElementById("Event-Data-Template");
