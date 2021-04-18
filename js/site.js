@@ -81,8 +81,8 @@ let eventArray = [{
 
 
 /*
- ** .Default display is all events.
- ** .filteredEvents will be udpated by matching city
+ ** .Default display is all events using eventArray[]
+ ** .filteredEvents[] will be udpated by matching city
  */
 let filteredEvents = eventArray;
 
@@ -100,10 +100,6 @@ let filteredEvents = eventArray;
  **                             .builds the location stats drop down menu by location. buildDropDownMenu()
  **                             .updates the statistics table.
  **                             .updates the main data table.
- **
- **
- **
- **
  **
  **
  */
@@ -132,10 +128,9 @@ let filteredEvents = eventArray;
 
 function buildDropDown() {
     buildDropDownMenu(); // build city drop down list
-    displayStats(); // display event stats by location
-    loadEventData(); // loads main data table.
+    updateEventDataDisplays();
     return null;
-}
+} /* end of buildDropDown() */
 
 /*
  ** .create location drop down menu for statistics
@@ -215,41 +210,48 @@ function buildDropDownMenu() {
 
     return null;
 
-} // end of buildDropDown
+} /* end of buildDropDown */
 
 
 
 /*
- **
- **
  **
  ** function after .filter where the code follows to check.filter(function (item) )
  ** item because a passed parm-local variable (name doesn't matter). it knows the array object has the .city propriety so we're checking
  ** the location city variable we got from the drop down list the use selected to match.  If true it creates the new filterEvents array with just the
  ** matching city value.  filteredevents[] is declared globally.
  **
- **
- **
  */
 
 
 //show stats for a specific location
 function getEvents(element) {
-    let city = element.getAttribute("data-string");
-    let curEvents = JSON.parse(localStorage.getItem("eventArray")) || eventArray;
+
+    let cityName = element.getAttribute("data-string"); /* get the use picked location name */
+    document.getElementById("statsHeader").innerHTML = `Stats For ${cityName} Events`; /* update the stats header */
+
+    setFilteredEvents(cityName);
+    displayStats();
+
+    return null;
+}
+
+function setFilteredEvents(matchCityName) {
+    //  let city = element.getAttribute("data-string");
+    let curEvents = getEventData(); /* get the current data set */
 
     filteredEvents = curEvents;
-    document.getElementById("statsHeader").innerHTML = `Stats For ${city} Events`;
-    if (city != "All") {
+    //    document.getElementById("statsHeader").innerHTML = `Stats For ${cityName} Events`;
+    if (matchCityName != "All") {
         //Explain how array filtering works-
         filteredEvents = curEvents.filter(function (item) {
-            if (item.city == city) {
+            if (item.city == matchCityName) {
                 return item;
             }
         });
     }
-    displayStats();
-} // end of getEvents
+    //  displayStats();
+} /* end of getEvents */
 
 
 /**
@@ -286,7 +288,7 @@ function displayStats() {
             maximumFractionDigits: 0,
         }
     );
-} // end of displayStats
+} /* end of displayStats */
 
 
 
@@ -312,21 +314,31 @@ loadEventData();
 
 
 function loadEventData() {
-    let eventData = [];
-    eventData = getEventData();
+
+    eventData = initGetEventData();
+
+    setFilteredEvents("All"); /* initialize filterEvents[] array for 1st time load of stats table */
+    displayStats();
     displayEventData(eventData);
 
     return null;
-} // end of loadEventData()
+} /* end of loadEventData() */
 
-
-function updateEvenDataDisplays() {
-
-    loadEventData();
+/*
+ ** .Consolidate logic to update the statistics and main data tables.
+ ** .updateEventDataDisplays() also called from js init loadEventData().
+ ** .Note: Cannot call getEvents() to update the global filteredEvents[] array.
+ **       .it must be called independetly when after a selection is made from the dropdown.
+ **       .it throws an error on the attribute call as the item isn't in scope.
+ **
+ */
+function updateEventDataDisplays() {
+    let eventData = getEventData();
     displayStats();
+    displayEventData(eventData);
 
     return null;
-}
+} /* end of updateEventDataDisplays() */
 
 
 /**
@@ -336,22 +348,76 @@ function updateEvenDataDisplays() {
  ** Everything pushed through JSON has to be stringify"ed"...turns it into JSON.
  **
  */
-function getEventData() {
-    let eventData = JSON.parse(localStorage.getItem("eventArray")) || [];
+function initGetEventData() {
+    let eventData = getEvenDataFromStorage(true);
 
     if (eventData.length == 0) {
         eventData = eventArray;
-        localStorage.setItem("eventArray", JSON.stringify(eventData));
+        putEvenData(eventData);
     }
 
     return eventData;
-} // end of getEventData()
 
+}
+
+function getEventData() {
+    let eventData = getEvenDataFromStorage(false);
+
+    return eventData;
+} /* end of getEventData() */
+
+
+/*
+ ** Data Access Routines:
+ **
+ ** .Application calls will use getEventData() and putEventData() for access.
+ ** .consolidate logic for JSON storage to omit multiple application references.
+ ** .this allows for flexibility in replacing the data access layer if needed.
+ ** .this exercise excludes error handling but this is where it would be included.
+ ** 
+ ** .Note: the static array and storage share the same name "eventArray"
+ */
+function getEvenDataFromStorage(createNewFromArray) {
+
+    let eventData = "";
+
+    if (createNewFromArray == true) {
+        eventData = JSON.parse(localStorage.getItem("eventArray")) || [];
+    } else {
+        eventData = JSON.parse(localStorage.getItem("eventArray")) || eventArray;
+    }
+
+    return eventData;
+
+} /* end of getEventDataFromStorage */
+
+function putEvenData(dataSet) {
+
+    /**
+     ** .future lessons yet to be had regarding error i/o handling best practices
+     ** .error logic would be added to respective data access errors.
+     */
+    localStorage.setItem("eventArray", JSON.stringify(dataSet));
+
+    return true;
+
+} /* end of putEventData() */
+
+
+/*
+** .user save new event form.
+** .grab the current dataset
+** .build a new object with the form contents and push onto the dataset and save.
+** .check if the current display stats header location matches the new form data.
+** .if it does update the stats window with the new data totals
+** .Also update the totals display if current on "All"
+** .rebuild the dropdown and update all displays.
+*/
 function saveEventFormData() {
 
-    // grab the events out of local storage
-    let eventData = JSON.parse(localStorage.getItem("eventArray")) || eventArray;
-
+    /* let eventData = JSON.parse(localStorage.getItem("eventArray")) || eventArray; */
+    let eventData = getEventData(); /* get the current data set */
+    let formCityName = "";
     let obj = {};
 
     obj["event"] = document.getElementById("newEvent").value;
@@ -362,11 +428,28 @@ function saveEventFormData() {
 
     eventData.push(obj);
 
-    localStorage.setItem("eventArray", JSON.stringify(eventData));
+    /* localStorage.setItem("eventArray", JSON.stringify(eventData)); replaced with putEventData() */
+    putEvenData(eventData);
 
-    buildDropDown(); // update dropdown menu to included the new dataset entry if unuique.
-    updateEvenDataDisplays(); // update the stats and main table data displays
+    let hdrCityStr = document.getElementById("statsHeader").innerHTML;
+    hdrCityStr = normalizeString(hdrCityStr);
+    hdrCityStr = hdrCityStr.replace("STATSFOR", "");
+    hdrCityStr = hdrCityStr.replace("EVENTS", "");
 
+    formCityName = obj["city"];
+    if (compareStringsTheSame(normalizeString(formCityName), hdrCityStr) == true || hdrCityStr == "ALL") {
+
+        if (hdrCityStr == "ALL") {
+            setFilteredEvents("All"); /* update filteredEvents[] for displaystats() */
+        } else {
+            setFilteredEvents(formCityName); /* update filteredEvents[] for displaystats() */
+        }
+    }
+
+
+    buildDropDown(); /* update dropdown menu to included the new dataset entry if unuique. */
+    updateEventDataDisplays(); /* update the stats and main table data displays */
+    document.getElementById("newAEventForm").reset(); /* reset the contents of the form */
     return null;
 } // end of saveEventData()
 
@@ -388,7 +471,7 @@ function displayEventData(eventData) {
         resultsBody.appendChild(dataRow);
     }
     return null;
-} // end of displayEvenData()
+} /* end of displayEvenData() */
 
 
 
