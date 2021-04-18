@@ -313,3 +313,7 @@ img.img-center {
   color: white;
   transform: rotateY(180deg);
 }
+
+.body-bg-color {
+background-color: rgba(9, 56, 30, 0.555;
+}
